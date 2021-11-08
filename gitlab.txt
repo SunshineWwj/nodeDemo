@@ -1,0 +1,109 @@
+VMware  虚拟机，可以虚拟系统 比如Linux系统
+MobaXterm 连接虚拟出来的Linux系统的客户端，可以用来敲Linux命令,比如docker ，算是Linux系统中的一个进程，然后可以在docker中pull镜像，比如gitlab镜像
+
+
+#!/bin/bash
+set -ex \
+    && sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-selinux \
+                  docker-engine-selinux \
+                  docker-engine
+    && yum update -y \
+    && sudo yum install -y yum-utils device-mapper-persistent-data lvm2 \
+    && sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo \
+    && sudo yum makecache fast \
+    && sudo yum -y install docker-ce \
+    && sudo systemctl start docker \
+    && sudo systemctl enable docker 
+
+docker pull gitlab/gitlab-ce
+
+
+
+mkdir -p /usr/local/gitlab/config
+mkdir -p /usr/local/gitlab/logs 
+mkdir -p /usr/local/gitlab/data
+
+//==================弃用开始=====================
+docker run -detach \
+  --publish 443:443 --publish 80:80 --publish 8222:22 \
+  --name gitlab \
+  --restart always \
+  --volume /usr/local/gitlab/config:/etc/gitlab \
+  --volume /usr/local/gitlab/logs:/var/log/gitlab \
+  --volume /usr/local/gitlab/data:/var/opt/gitlab \
+  --privileged=true \
+  gitlab/gitlab-ce:13.8.6-ce.0
+//================弃用结束========================
+
+
+docker run -d \
+ --name gitlab \
+ --hostname gitlab \
+ --restart always \
+--privileged=true \
+ -p 443:443 -p 80:80 -p 2222:22 \
+ -v /usr/local/gitlab/config:/etc/gitlab \
+ -v /usr/local/gitlab/logs:/var/log/gitlab \
+ -v /usr/local/gitlab/data:/var/opt/gitlab \
+gitlab/gitlab-ce:13.8.6-ce.0 
+
+
+# gitlab.rb文件
+vi /usr/local/gitlab/config/gitlab.rb 
+
+
+external_url 'http://ip/'
+
+# 配置ssh协议所使用的访问地址和端口
+gitlab_rails['gitlab_ssh_host'] = 'ip'  #192.168.29.50  root
+gitlab_rails['gitlab_shell_ssh_port'] =port  # 此端口是run时22端口映射的端口
+
+
+
+
+1.安装git客户端软件
+2.创建ssh key
+命令:ssh-keygen -t rsa -C "xx@xx.com" (这里写自己的邮箱，格式为自己的用户名前缀，例如张三@123456.com)，一路回车，生成密钥对：
+
+3.cat /root/.ssh/id_rsa.pub
+复制公钥到gitlab
+
+git config --global user.name "Your account name"　　＃自己的姓名，commit代码的时候用到
+git config --global user.email "your email address"　＃自己的邮箱，commit代码的时候用到。
+4.克隆文件 git clone http地址 从gitlab复制
+
+ GITLAB服务器:http://172.16.4.151 #192.168.29.50 
+git clone 项目地址
+
+5.cd 到新克隆的分支
+cd 目录
+
+5.分支查看
+git branch -va
+
+6.本地分支更新远程分支
+git fetch origin --prune
+
+7.切换分支(dev为开发分支)
+git checkout DEV
+
+8.添加要上传的文件目录
+git add .
+
+9.添加提交描述
+git commit -m "描述的话"
+
+
+10.上传到文件分支
+git push -u origin DEV
+
+
+
+

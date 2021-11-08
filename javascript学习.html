@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // var name=prompt('请输入姓名：');
+        // var age=prompt('请输入年龄：');  //注意 prompt输出的都是字符串类型
+        // console.log(name);
+        // age = Number(age);//转换成数字类型
+        // console.log(age);
+
+        //交换两个变量的值，至少用两种方式
+        // var num1=3;
+        // var num2=8;
+        // console.log('交换前：',num1,num2);
+
+        //方法一  临时变量
+        // var temp=num1;
+        // num1=num2;
+        // num2=temp;
+        // console.log('方式一交换后：',num1,num2);
+
+        //方式二 加减运算
+        // num1=num1+num2;//11
+        // num2=num1-num2;//3
+        // num1=num1-num2;//8
+        // console.log('方式二交换后：',num1,num2);
+
+        //方式三 解构赋值
+        // [num1,num2]=[num2,num1];
+        // console.log('方式三交换后：',num1,num2);
+
+        //提示用户输入一个数字，并输出加法表，如输入6，则输出：0+6=6 1+5=6 2+4=6 3+3=6 4+2=6 5+1=6 6+0=6
+        // var num=prompt('请输入一个数字:');
+        // for (let i = 0; i <= num; i++) {
+        //     console.log(i+'+'+(num-i)+'='+num);
+        // }
+
+
+        //for循环 
+        //break 表示跳出循环，执行循环外的逻辑
+        //continue 表示跳出本次循环，执行下一次循环
+
+        //计算1-5之间的奇数和
+        // var sum=0;
+        // for(var i=1;i<=5;i++){
+        //     if(i%2===0){
+        //         continue;
+        //     }
+        //     sum+=i;
+        // }
+        // console.log('奇数和为：',sum);
+
+////////////////////////////////////////////变量提升////////////////////////////////////////////
+
+        // 变量提升
+        var a=18;
+        f1();
+        function f1(){
+            var b=9;
+            console.log(a);
+            console.log(b);
+            // var a='123'
+        }
+
+        /*
+            浏览器解析器解析javascript代码的过程
+        */
+        //预解析 （全局作用域）
+        var a;//第1步
+        function f1(){ //第2部
+            var b;//第5步 //预解析 （局部作用域）
+            var a; //第6步
+
+            b=9;//第7步
+            console.log(a); //第8步 (出现同名变量a，会调用局部变量的值，而局部变量a此时未赋值)  =>undefined
+            console.log(b);//第9步 //=>9
+            a='123' //第10步
+        }
+        a=18; //第3步
+        f1(); //第4步
+
+////////////////////////////////////////////变量提升/////////////////////////////////////////////////
+
+
+    // f2();
+    // console.log(a);
+    // console.log(b);
+    // console.log(c);
+    // function f2(){
+    //     var a=b=c=9; //等价于 var a=9,b=9,c=9
+    //     // var a=9,b=9,c=9;//等价于 var a=9;var b=9;var c=9;
+    //     console.log(a);
+    //     console.log(b);
+    //     console.log(c);
+    // }
+
+    // function f2(){ //1
+    //     var a,b,c;//3
+    //     a=b=c=9;//4
+    //     console.log(a);//5
+    //     console.log(b);//6
+    //     console.log(c);//7
+    // }
+    // f2();//2
+    // console.log(a);//8
+    // console.log(b);//9
+    // console.log(c);//10
+
+////////////////////////////////////////////////////////////////////////////////////
+    var a = 10;
+    var b = 10;
+
+    console.log(a);//=>10
+    fun1();
+    console.log(a); //=>20
+    function fun1(){
+        a = 20;
+        fun2(a);
+    }
+
+    function fun2(a){
+        a=30;
+        a += b;
+    }
+
+///////////////////////////////////////////////////////////////////////
+// var nums=[17,4,6,2,9,10];
+// nums.sort(function(a,b){
+//     return a-b;
+// });
+// console.log(nums)
+
+/////////////////////////////////////////////变量提升/////////////////////
+
+// var a=100;
+// function funa(){
+//     // alert(a);
+//     console.log(a);
+//     var a=10;
+//     // alert(a);
+//     console.log(a);
+// }
+// funa();
+
+var a;//1
+function funa(){//2
+    var a;//5
+
+    // alert(a);//6 此时局部变量a未赋值 =>undefined
+    console.log(a);
+    a=10;//7
+    // alert(a);//8   =>10
+    console.log(a);
+};
+a=100;//3
+funa();//4
+
+    </script>
+</body>
+</html>
