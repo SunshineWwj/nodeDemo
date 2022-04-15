@@ -1,0 +1,30 @@
+!
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='with=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>hello world</h1>
+
+    <script>
+        document.body.style.background='red'
+        console.log(1)
+        Promise.resolve().then(()=>{
+            console.log(2)
+            document.body.style.background='yellow'
+        })
+        console.log(3)
+
+        //总结 黄色背景  输出132
+        //因为页面渲染 会在微任务执行完之后渲染 所以不会出现先红色后变黄的现象
+    </script>
+</body>
+
+
+</html>
